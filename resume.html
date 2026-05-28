@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liu Mujia | Portfolio</title>
+    <style>
+        /* --- 苹果高端暗色/多彩设计变量 --- */
+        :root {
+            --bg-dark: #000000;
+            --bg-card: #161617;
+            --text-primary: #f5f5f7;
+            --text-secondary: #86868b;
+            
+            /* 模块高光渐变 */
+            --gradient-hero: linear-gradient(135deg, #ff6b6b, #ff8e53, #4ea8de);
+            --gradient-edu: linear-gradient(135deg, #a8ff78, #78ffd6);
+            --gradient-exp: linear-gradient(135deg, #bf5af2, #5e5ce6);
+            --gradient-proj: linear-gradient(135deg, #2f9e44, #3bc9db);
+            --gradient-award: linear-gradient(135deg, #ffd700, #ff8c00, #ff007f);
+            
+            --radius-lg: 28px;
+            --radius-md: 16px;
+            --bezier-smooth: all 0.8s cubic-bezier(0.15, 0.85, 0.35, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif;
+            -webkit-font-smoothing: antialiased;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        /* --- 导航栏 --- */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            color: #fff;
+        }
+
+        nav {
+            display: flex;
+            gap: 24px;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: var(--bezier-smooth);
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--text-primary);
+        }
+
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+            padding: 6px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: var(--bezier-smooth);
+        }
+
+        .lang-btn:hover {
+            background: var(--text-primary);
+            color: var(--bg-dark);
+        }
+
+        /* --- 总：Hero 巨幕舞台 --- */
+        .hero-section {
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            position: relative;
+        }
+
+        .hero-title {
+            font-size: 64px;
+            font-weight: 800;
+            letter-spacing: -2px;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            background: var(--gradient-hero);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 24px;
+            color: var(--text-secondary);
+            max-width: 700px;
+            line-height: 1.5;
+            margin-bottom: 40px;
+        }
+
+        .slider-container {
+            width: 100%;
+            max-width: 600px;
+            height: 40px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .slider-wrapper {
+            display: flex;
+            flex-direction: column;
+            animation: slideUp 12s infinite cubic-bezier(0.85, 0, 0.15, 1);
+        }
+
+        .slide-item {
+            height: 40px;
+            line-height: 40px;
+            font-size: 18px;
+            font-weight: 500;
+            color: #0071e3;
+        }
+
+        @keyframes slideUp {
+            0%, 20% { transform: translateY(0); }
+            25%, 45% { transform: translateY(-40px); }
+            50%, 70% { transform: translateY(-80px); }
+            75%, 95% { transform: translateY(-120px); }
+            100% { transform: translateY(0); }
+        }
+
+        /* --- 分：长轴沉浸式内容区 --- */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 40px 100px 40px;
+        }
+
+        .story-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 60px;
+            margin-bottom: 60px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            opacity: 0;
+            transform: translateY(50px);
+            transition: var(--bezier-smooth);
+        }
+
+        .story-card.reveal {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-tag {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .section-title {
+            font-size: 40px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 40px;
+        }
+
+        /* 混排网格（左右1.2:1比例） */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        /* 经历条目排版 */
+        .timeline-item {
+            border-left: 2px solid rgba(255, 255, 255, 0.1);
+            padding-left: 24px;
+            padding-bottom: 28px;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -7px;
+            top: 6px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #fff;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 10px;
+        }
+
+        .item-header h4 { font-size: 18px; font-weight: 600; color: #fff; }
+        .item-meta { color: var(--text-secondary); font-size: 13px; }
+
+        ul {
+            padding-left: 18px;
+            color: #a1a1a6;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        li { margin-bottom: 8px; }
+
+        .tag-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .tag-pill {
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-primary);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* --- 微缩标准证件照容器 (3:4) --- */
+        .id-photo-box {
+            width: 240px;
+            height: 320px;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            overflow: hidden;
+            justify-self: center;
+            background: #222;
+        }
+
+        .id-photo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* --- 【微调】支持自定义纯净无图片的轮播与图片容器 --- */
+        .project-carousel {
+            width: 100%;
+            height: 420px;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #111;
+        }
+
+        .carousel-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carousel-slide.active {
+            opacity: 1;
+            z-index: 2;
+        }
+
+        /* 纯净图片框样式，可填入你自己的 src */
+        .placeholder-image-box {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.05) 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 13px;
+            text-align: center;
+            padding: 20px;
+            border: 1px dashed rgba(255,255,255,0.15);
+            border-radius: var(--radius-md);
+        }
+
+        .carousel-slide img, .placeholder-image-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .carousel-caption {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: linear-gradient(transparent, rgba(0,0,0,0.85));
+            padding: 20px;
+            color: #fff;
+            font-size: 13px;
+            z-index: 3;
+            font-weight: 500;
+        }
+
+        /* --- 全英文纯净微观挂件 --- */
+        .widget-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-md);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            box-shadow: inset 0 1px 1px rgba(255,255,255,0.1);
+        }
+
+        .widget-title {
+            font-size: 13px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            background: var(--gradient-hero);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .media-box {
+            width: 100%;
+            height: 100%;
+            min-height: 340px;
+            border-radius: var(--radius-md);
+            background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+            border: 1px dashed rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+            overflow: hidden;
+        }
+
+        /* 语言显隐控制选择器 */
+        body[lang="en"] .zh-text { display: none !important; }
+        body[lang="en"] .en-text { display: inline-block; }
+        body[lang="zh"] .en-text { display: none !important; }
+        body[lang="zh"] .zh-text { display: inline-block; }
+
+        /* 响应式调整 */
+        @media (max-width: 900px) {
+            .content-grid { grid-template-columns: 1fr; gap: 30px; }
+            .hero-title { font-size: 42px; }
+            .section-title { font-size: 30px; }
+            .story-card { padding: 30px; }
+            header { padding: 16px 20px; }
+            nav { display: none; }
+            .id-photo-box { width: 180px; height: 240px; }
+        }
+    </style>
+</head>
+<body lang="en">
+
+    <!-- --- 顶栏导航 --- -->
+    <header>
+        <div class="logo">Liu Mujia.</div>
+       <nav>
+            <a href="#about" class="active">
+                <span class="en-text">About</span><span class="zh-text">关于我</span>
+            </a>
+            <a href="#skills">
+                <span class="en-text">Skills</span><span class="zh-text">核心技能</span>
+            </a>
+            <a href="#education">
+                <span class="en-text">Education</span><span class="zh-text">教育背景</span>
+            </a>
+            <a href="#internship">
+                <span class="en-text">Internship</span><span class="zh-text">实习经历</span>
+            </a>
+            <a href="#projects">
+                <span class="en-text">Projects</span><span class="zh-text">项目经验</span>
+            </a>
+            <a href="#awards">
+                <span class="en-text">Awards</span><span class="zh-text">荣誉奖项</span>
+            </a>
+        </nav>
+        <button class="lang-btn" id="langBtn" onclick="toggleLanguage()">中文</button>
+    </header>
+
+    <!-- ================= 总：Hero 舞台剧幕 ================= -->
+    <section class="hero-section">
+        <h1 class="hero-title">
+            <span class="en-text">Hello, I'm Liu Mujia</span>
+            <span class="zh-text">你好，我是刘沐嘉</span>
+        </h1>
+        <p class="hero-subtitle">
+            <span class="en-text">A Journalism graduate driving cross-functional synergy between cutting-edge technology, product design, and AI workflows.</span>
+            <span class="zh-text">新闻传播学背景的跨界破局者[cite: 1] 。专注于前沿科技、产品管理与 AI 高效协同流。</span>
+        </p>
+        
+        <div class="slider-container">
+            <div class="slider-wrapper">
+                <div class="slide-item">
+                    <span class="en-text">✨ International Invention Exhibition Gold & Silver Awardee</span>
+                    <span class="zh-text">✨ 国际发明展金奖、银奖得主[cite: 1]</span>
+                </div>
+                <div class="slide-item">
+                    <span class="en-text">🤖 Certified Expert @ Tencent AI Training Camp</span>
+                    <span class="zh-text">🤖 腾讯 AI 特训营受训认证[cite: 1]</span>
+                </div>
+                <div class="slide-item">
+                    <span class="en-text">🦾 Project Manager for UpperLimb Exoskeleton Robot</span>
+                    <span class="zh-text">🦾 上肢外骨骼机器人项目研发管理 PM[cite: 1]</span>
+                </div>
+                <div class="slide-item">
+                    <span class="en-text">✍️ 4,000+ Views Deep-Dive Content Strategist</span>
+                    <span class="zh-text">✍️ 独立操盘单篇 4000+ 阅读深度爆款推文[cite: 1]</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= 分：长轴沉浸式卡片故事流 ================= -->
+    <div class="container">
+
+        <!-- 1. 个人介绍模块 -->
+        <section class="story-card" id="about">
+            <span class="section-tag" style="background: var(--gradient-hero); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">01 / Identity</span>
+            <h2 class="section-title">
+                <span class="en-text">About Me</span>
+                <span class="zh-text">关于我</span>
+            </h2>
+            <div class="content-grid">
+                <div>
+                    <ul style="list-style: none; padding-left: 0;">
+                        <li style="margin-bottom: 20px;">
+                            <strong style="color:#fff; font-size:16px;" class="en-text">Aesthetics & Copywriting</strong>
+                            <strong style="color:#fff; font-size:16px;" class="zh-text">视觉美学与内容直觉</strong>
+                            <p style="color: var(--text-secondary); margin-top:4px; font-size: 14px;" class="en-text">Deep journalism foundation allows me to filter noise, extract product core values, and script compelling visual narratives.</p>
+                            <p style="color: var(--text-secondary); margin-top:4px; font-size: 14px;" class="zh-text">深厚的新闻传播底蕴[cite: 1]，让我具备敏锐的信息过滤能力，擅长精准提炼产品核心价值并转化为强视觉感的内容传播线。</p>
+                        </li>
+                        <li style="margin-bottom: 20px;">
+                            <strong style="color:#fff; font-size:16px;" class="en-text">Human-AI Collaboration</strong>
+                            <strong style="color:#fff; font-size:16px;" class="zh-text">高效 Human-AI 协同</strong>
+                            <p style="color: var(--text-secondary); margin-top: 4px; font-size: 14px;" class="en-text">
+    Expert in leveraging LLMs to optimize market research, product definition, and prompt engineering, utilizing AI tools to accelerate prototyping and cross-functional innovation.
+</p>
+                            <p style="color: var(--text-secondary); margin-top: 4px; font-size: 14px;" class="zh-text">
+    擅长将大语言模型融入全工作流，在市场调研、产品定义、Prompt提示词工程上具备良好的应用经验，并能通过 AI 工具辅助辅助进行产品原型与跨学科的创新思维探索。
+</p>
+                        </li>
+                    </ul>
+                    <div class="tag-group" style="margin-top: 20px;">
+                        <div class="tag-pill">+86 13823020617[cite: 1]</div>
+                        <div class="tag-pill">liumujiazz@outlook.com[cite: 1]</div>
+                    </div>
+                </div>
+                <div class="id-photo-box">
+                    <img src="myphoto.jpg" alt="Liu Mujia">
+                </div>
+            </div>
+        </section>
+
+
+<!-- ✨ 极简技能模块 -->
+        <section class="story-card" id="skills">
+            <span class="section-tag" style="background: linear-gradient(135deg, #4ea8de, #5e5ce6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">02 / Toolkit</span>
+            <h2 class="section-title">
+                <span class="en-text">Skills & Tools</span>
+                <span class="zh-text">技能与工具</span>
+            </h2>
+            
+            <div style="display: flex; flex-direction: column; gap: 24px;">
+                <!-- 办公与数据分析 -->
+                <div>
+                    <h3 style="color: var(--text-secondary); font-size: 14px; font-weight: 500; margin-bottom: 12px;" class="en-text">Office & Data Analysis</h3>
+                    <h3 style="color: var(--text-secondary); font-size: 14px; font-weight: 500; margin-bottom: 12px;" class="zh-text">办公与数据分析</h3>
+                    <div class="tag-group">
+                        <span class="tag-pill">WPS Office</span>
+                        <span class="tag-pill">Excel</span>
+                        <span class="tag-pill">SPSS</span>
+                    </div>
+                </div>
+
+                <!-- AI 高效协同工具 -->
+                <div>
+                    <h3 style="color: var(--text-secondary); font-size: 14px; font-weight: 500; margin-bottom: 12px;" class="en-text">AI Collaboration Tools</h3>
+                    <h3 style="color: var(--text-secondary); font-size: 14px; font-weight: 500; margin-bottom: 12px;" class="zh-text">AI 高效协同工具</h3>
+                    <div class="tag-group">
+                        <span class="tag-pill">LLMs (ChatGPT / Claude / Kimi)</span>
+                        <span class="tag-pill">Prompt Engineering (提示词工程)</span>
+                        <span class="tag-pill">Midjourney / Stable Diffusion</span>
+                    </div>
+                </div>
+
+                <!-- 视觉与新媒体创作 -->
+                <div>
+                    <h3 style="color: var(--text-secondary); font-size: 14px; font-weight: 500; margin-bottom: 12px;" class="en-text">Media & Design</h3>
+                    <h3 style="color: var(--text-secondary); font-size: 14px; font-weight: 500; margin-bottom: 12px;" class="zh-text">视觉与媒体创作</h3>
+                    <div class="tag-group">
+                        <span class="tag-pill">CapCut (剪映)</span>
+                        <span class="tag-pill">Canva (可画)</span>
+                        <span class="tag-pill">HTML5 / CSS3 / JavaScript (基础交互)</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- 2. 教育背景模块 (右侧全英文纯净微挂件) -->
+        <section class="story-card" id="education">
+            <span class="section-tag" style="background: var(--gradient-edu); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">03 / Foundation</span>
+            <h2 class="section-title">
+                <span class="en-text">Education</span>
+                <span class="zh-text">教育背景</span>
+            </h2>
+            <div class="content-grid">
+                <div class="timeline-item" style="border: none; padding-bottom: 0;">
+                    <div class="item-header">
+                        <h4>
+                            <span class="en-text">Shenzhen University</span>
+                            <span class="zh-text">深圳大学[cite: 1]</span>
+                        </h4>
+                        <span class="item-meta">2022 - 2026</span>
+                    </div>
+                    <p style="color:#0071e3; font-weight:500; margin-bottom: 16px; font-size: 14px;">
+                        <span class="en-text">Bachelor in Journalism & Communication · School of Media and Communication</span>
+                        <span class="zh-text">网络与新媒体 · 媒体与传播学院 (文学学士)[cite: 1]</span>
+                    </p>
+                    <div class="tag-group">
+                        <span class="tag-pill en-text">Data Theory & Literacy</span><span class="tag-pill zh-text">数据理论与素养[cite: 1]</span>
+                        <span class="tag-pill en-text">JavaScript Interaction Design</span><span class="tag-pill zh-text">JavaScript 网页交互设计[cite: 1]</span>
+                        <span class="tag-pill en-text">Data Processing & SPSS</span><span class="tag-pill zh-text">数据处理与 SPSS[cite: 1]</span>
+                        <span class="tag-pill en-text">Programming Fundamentals</span><span class="tag-pill zh-text">程序设计基础[cite: 1]</span>
+                        <span class="tag-pill en-text">Graphic Information Processing</span><span class="tag-pill zh-text">图文信息处理[cite: 1]</span>
+                        <span class="tag-pill en-text">AI & Innovation</span><span class="tag-pill zh-text">AI 与创新应用[cite: 1]</span>
+                    </div>
+                </div>
+                <!-- 优化：全新纯英文核心能力挂件 -->
+                <div class="widget-box">
+                    <div class="widget-title">📊 Core Competency Matrix</div>
+                    <div class="stat-row">
+                        <span>Interaction Design & Data Analysis</span>
+                        <span class="stat-value" style="background: var(--gradient-edu); -webkit-background-clip: text;">Top Class</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>English Communication & Presentation</span>
+                        <span class="stat-value" style="background: var(--gradient-edu); -webkit-background-clip: text;">Fluent</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>AI Workflow & Prompt Engineering</span>
+                        <span class="stat-value" style="background: var(--gradient-edu); -webkit-background-clip: text;">Fluent</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. 实习经历模块 (右侧更换为图片展示区) -->
+        <!-- 3. 实习经历模块 (全面修复重构：杜绝遮挡溢出) -->
+        <section class="story-card" id="internship">
+            <span class="section-tag" style="background: var(--gradient-exp); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">04 / Professional</span>
+            <h2 class="section-title">
+                <span class="en-text">Internship Experience</span>
+                <span class="zh-text">实习经历</span>
+            </h2>
+            <!-- 💡 关键在这里：改成 stretch 对齐，让文字和图片天然等高，绝对不会错位盖住下方 -->
+            <div class="content-grid" style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 50px; align-items: stretch;">
+                <div class="timeline-item" style="border-bottom: none; padding-bottom: 0;">
+                    <div class="item-header">
+                        <h4>
+                            <span class="en-text">Watt Power Equipment Co., Ltd.</span>
+                            <span class="zh-text">瓦特电力设备有限公司</span>
+                        </h4>
+                        <span class="item-meta">Brand & Content Intern</span>
+                    </div>
+                    <ul>
+                        <li class="en-text">Assisted in coordinating the corporate WeChat Work video channel, breaking down technical industrial product specs into clear and digestible B2B video content.</li>
+                        <li class="zh-text">参与企业号视频渠道的日常运营，协助将垂直、高壁垒的电力工业硬件参数转化为清晰、易懂的 B2B 运营内容。</li>
+                        <li class="en-text">Handled the complete process of technical product videos and team videos, covering script fine-tuning, on-site filming assistance, and post-production editing via CapCut.</li>
+                        <li class="zh-text">负责核心产品线及员工视频的制作，协助细化脚本、参与现场拍摄，并运用剪映独立完成后期剪辑与动效包装。</li>
+                        <li class="en-text">Monitored backend data funnels (retention, views), providing weekly reporting to support the content strategy optimizations and audience engagement.</li>
+                        <li class="zh-text">持续跟踪后台视频留存率、完播率等核心数据，整理周度数据反馈，协助团队优化后续的发布策略与垂直受众粘性。</li>
+                    </ul>
+                </div>
+                
+                <!-- 💡 修复后的图片外壳：舍弃了不稳定的绝对定位，使用 block 渲染 -->
+                <div style="width: 100%; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(255, 255, 255, 0.02); display: flex; align-items: center; justify-content: center;">
+                    <img src="实习照.jpg" alt="Watt Power WeChat Work Operations" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. 项目经验模块 (详细扩写 + 纯净自主轮播) -->
+        <section class="story-card" id="projects">
+            <span class="section-tag" style="background: var(--gradient-proj); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">05 / Execution</span>
+            <h2 class="section-title">
+                <span class="en-text">Project Experience</span>
+                <span class="zh-text">项目经验</span>
+            </h2>
+            <div class="content-grid">
+                
+                <div style="max-height: 440px; overflow-y: auto; padding-right: 15px;">
+                    <div class="timeline-item">
+                        <div class="item-header">
+                            <strong style="color: #fff; font-size: 16px;">
+    <span class="en-text">🦾 UpperLimb Exoskeleton PM</span>
+    <span class="zh-text">🦾 上肢外骨骼机器人项目负责人</span>
+</strong>
+                            <span class="item-meta">Efficiency +30%[cite: 1]</span>
+                        </div>
+                        <p style="font-size:13px; color:var(--text-secondary); margin-bottom: 6px;" class="en-text">
+    Acted as a project coordinator during the early R&D stage, facilitating alignment and daily communication across technical sub-teams (mechanical, electrical, and control algorithms). Established weekly sync meetings, improving team communication efficiency by 30% and reducing design rework risks.
+</p>
+<p style="font-size:13px; color:var(--text-secondary); margin-bottom: 6px;" class="zh-text">
+    在项目早期研发阶段担任协调角色，负责机械、电气、算法等技术子团队之间的日常沟通与进度对齐。建立周度同步会议机制，将跨团队信息对齐效率提升 30%，有效降低了前期结构设计重做的风险。
+</p>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="item-header">
+                            <strong style="color: #fff; font-size: 16px;">
+    <span class="en-text">💌 Campus Letter Drifting Lead</span>
+    <span class="zh-text">💌 校园信笺漂流活动负责人</span>
+</strong>
+                            <span class="item-meta">1,000+ Transformed[cite: 1]</span>
+                        </div>
+                        <p style="font-size:13px; color:var(--text-secondary); margin-bottom: 6px;" class="en-text">Organized  Letter Drifting Event autumn offline campus campaign, successfully driving interactions over 1,000 students[cite: 1]. Redesigned booth visual layout and user onboarding guidelines, boosting standard physical on-site conversion rates by 200%.</p>
+                        <p style="font-size:13px; color:var(--text-secondary); margin-bottom: 6px;" class="zh-text">组织深大秋季大型线下高校信笺漂流活动，实现公域流量的高效拦截，触达并转化千级学生群体深度沉浸互动[cite: 1]。精细化重构展位空间视觉动线与路人转化引导话术，创下了路人转化率飙升 200% 的实战突破[cite: 1]。</p>
+                    </div>
+
+                    <div class="timeline-item" style="border:none; padding-bottom:0;">
+                        <div class="item-header">
+                            <strong style="color: #fff; font-size: 16px;">
+    <span class="en-text">🎪 "Sound Joy" Festival Lead</span>
+    <span class="zh-text">🎪 音JOY嘉年华活动负责人</span>
+</strong>
+                            <span class="item-meta">4k+ Hits / 3k Participants[cite: 1]</span>
+                        </div>
+                        <p style="font-size:13px; color:var(--text-secondary); margin-bottom: 6px;" class="en-text">Utilized Canva to construct the unified immersive visual identity system for installations, attracting over 3,000 local attendees[cite: 1]. Formulated brand activation copy-scripts for top tech brands like Huawei and Maoyan[cite: 1]. Published viral multi-channel deep-dives, breaking records with 4,000+ view rates on a single post[cite: 1].</p>
+                        <p style="font-size:13px; color:var(--text-secondary); margin-bottom: 6px;" class="zh-text">基于 Canva 工具独立输出整套大体量沉浸式线下打卡装置的视觉美学视觉体系，吸引逾3000人次参与实地交互[cite: 1]。高水准承接华为、猫眼等顶尖赞助商的快闪品牌激活展位设计[cite: 1]；操盘自媒体矩阵，操刀3篇深度宣发稿件，单篇最高斩获4000+爆款阅读量[cite: 1]。</p>
+                    </div>
+                </div>
+
+                <!-- 优化：去掉了预设外部网络图，纯净留空方便放你自己的三张图 -->
+                <div class="project-carousel">
+                    <!-- 图片1 -->
+                    <div class="carousel-slide active">
+                        <div class="placeholder-image-box">
+                            <!-- 这里直接填你的第一张项目图路径 -->
+                            <!-- <img src="你的图片1.jpg" alt="Project 1"> -->
+                           <img src="外骨骼.jpg" alt="Internship Snapshot" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;">
+                        </div>
+                        <div class="carousel-caption">
+                            <span class="en-text">01 / UpperLimb Exoskeleton R&D Tracking</span>
+                            <span class="zh-text">01 / 上肢外骨骼机器人跨团队研发管理[cite: 1]</span>
+                        </div>
+                    </div>
+                    <!-- 图片2 -->
+                    <div class="carousel-slide">
+                        <div class="placeholder-image-box">
+                            <!-- 这里直接填你的第二张项目图路径 -->
+                            <!-- <img src="你的图片2.jpg" alt="Project 2"> -->
+                            <img src="校园活动.jpg" alt="Internship Snapshot" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;">
+                        </div>
+                        <div class="carousel-caption">
+                            <span class="en-text">02 / Campus Offline Marketing Strategies</span>
+                            <span class="zh-text">02 / 校园线下营销活动与高转化动线设计[cite: 1]</span>
+                        </div>
+                    </div>
+                    <!-- 图片3 -->
+                    <div class="carousel-slide">
+                        <div class="placeholder-image-box">
+                            <!-- 这里直接填你的第三张项目图路径 -->
+                            <!-- <img src="你的图片3.jpg" alt="Project 3"> -->
+<img src="音joy.jpg" alt="Internship Snapshot" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;">
+                        </div>
+                        <div class="carousel-caption">
+                            <span class="en-text">03 / Experiential Brand Activation Design</span>
+                            <span class="zh-text">03 / 沉浸式快闪装置美学设计与赞助商激活[cite: 1]</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 5. 荣誉与专利模块 -->
+        <section class="story-card" id="awards">
+            <span class="section-tag" style="background: var(--gradient-award); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">06 / Recognition</span>
+            <h2 class="section-title">
+                <span class="en-text">Awards & Patent</span>
+                <span class="zh-text">荣誉与专利</span>
+            </h2>
+            <div class="content-grid">
+                <div>
+                    <ul style="list-style: none; padding-left: 0;">
+                        <!-- 1. 澳门发明展 -->
+                        <li style="margin-bottom: 16px; display: flex; gap: 12px; align-items: center;">
+                            <span style="font-size: 20px;">🥈</span>
+                            <div>
+                                <strong style="color: #fff; font-size:15px;" class="en-text">Macau International Invention Exhibition</strong>
+                                <strong style="color: #fff; font-size:15px;" class="zh-text">澳门国际创新发明展</strong>
+                                <p style="color: #0071e3; font-size:13px; font-weight:600;">Silver Award</p>
+                            </div>
+                        </li>
+                        <!-- 2. 国际青年专利孵化展 -->
+                        <li style="margin-bottom: 16px; display: flex; gap: 12px; align-items: center;">
+                            <span style="font-size: 20px;">🥇</span>
+                            <div>
+                                <strong style="color: #fff; font-size:15px;" class="en-text">International Youth Patent Incubation Award</strong>
+                                <strong style="color: #fff; font-size:15px;" class="zh-text">国际青年专利孵化展</strong>
+                                <p style="color: #ffd700; font-size:13px; font-weight:600;">Gold Award</p>
+                            </div>
+                        </li>
+                        <!-- 3. 波兰发明展 -->
+                        <li style="margin-bottom: 16px; display: flex; gap: 12px; align-items: center;">
+                            <span style="font-size: 20px;">🥈</span>
+                            <div>
+                                <strong style="color: #fff; font-size:15px;" class="en-text">Poland International Invention Exhibition</strong>
+                                <strong style="color: #fff; font-size:15px;" class="zh-text">波兰国际发明展</strong>
+                                <p style="color: #0071e3; font-size:13px; font-weight:600;">Silver Award</p>
+                            </div>
+                        </li>
+                        <!-- ✨ 新增：广东省青少年科技创新大赛 -->
+                        <li style="margin-bottom: 16px; display: flex; gap: 12px; align-items: center;">
+                            <span style="font-size: 20px;">🥈</span>
+                            <div>
+                                <strong style="color: #fff; font-size:15px;" class="en-text">Guangdong Youth Science & Technology Innovation Competition</strong>
+                                <strong style="color: #fff; font-size:15px;" class="zh-text">广东省青少年科技创新大赛</strong>
+                                <p style="color: #0071e3; font-size:13px; font-weight:600;">Second Prize</p>
+                            </div>
+                        </li>
+                        <!-- ✨ 新增：地理奥林匹克竞赛 -->
+                        <li style="margin-bottom: 16px; display: flex; gap: 12px; align-items: center;">
+                            <span style="font-size: 20px;">🥈</span>
+                            <div>
+                                <strong style="color: #fff; font-size:15px;" class="en-text">Geography Olympiad</strong>
+                                <strong style="color: #fff; font-size:15px;" class="zh-text">地理奥林匹克竞赛</strong>
+                                <p style="color: #0071e3; font-size:13px; font-weight:600;">Silver Medal</p>
+                            </div>
+                        </li>
+                        <!-- 6. 中国实用新型专利 -->
+                        <li style="display: flex; gap: 12px; align-items: start;">
+                            <span style="font-size: 20px;">📜</span>
+                            <div>
+                                <strong style="color: #fff; font-size:15px;" class="en-text">China Utility Model Patent</strong>
+                                <strong style="color: #fff; font-size:15px;" class="zh-text">中国实用新型专利</strong>
+                                <p style="color: var(--text-secondary); font-size:13px;" class="zh-text">《激光点打点计时小车》— 已正式授权</p>
+                                <p style="color: var(--text-secondary); font-size:13px;" class="en-text">"Laser Dot Timing Car" — Authorized & Granted</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="media-box">
+                  <img src="专利.jpg" alt="Awards Showcase" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- --- 核心控制 JS --- -->
+    <script>
+        let currentLang = 'en'; 
+
+        // --- 滚动曝光动画 (Intersection Observer) ---
+        const observerOptions = { root: null, threshold: 0.15 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('reveal');
+                    updateNav(entry.target.id);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.story-card').forEach(card => observer.observe(card));
+
+        function updateNav(id) {
+            document.querySelectorAll('nav a').forEach(a => {
+                a.classList.remove('active');
+                if (a.getAttribute('href') === `#${id}`) a.classList.add('active');
+            });
+        }
+
+        // --- 项目模块图片自动轮播切换控制 ---
+        let slideIndex = 0;
+        const slides = document.querySelectorAll('.carousel-slide');
+        
+        function autoShuffleSlides() {
+            if(slides.length === 0) return;
+            slides[slideIndex].classList.remove('active');
+            slideIndex = (slideIndex + 1) % slides.length;
+            slides[slideIndex].classList.add('active');
+        }
+        setInterval(autoShuffleSlides, 3000); 
+
+        // --- 中英双语无缝切换 ---
+        function toggleLanguage() {
+            const body = document.body;
+            const langBtn = document.getElementById('langBtn');
+            
+            if (currentLang === 'en') {
+                currentLang = 'zh';
+                body.setAttribute('lang', 'zh');
+                langBtn.innerText = 'English';
+                document.title = "刘沐嘉 | 个人主页";
+            } else {
+                currentLang = 'en';
+                body.setAttribute('lang', 'en');
+                langBtn.innerText = '中文';
+                document.title = "Liu Mujia | Portfolio";
+            }
+        }
+    </script>
+</body>
+</html>
